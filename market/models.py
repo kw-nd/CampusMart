@@ -11,6 +11,7 @@ CONDITION_CHOICES = [
 
 class CustomUser(AbstractUser):
     name = models.CharField(max_length=100)
+    extra_listings = models.IntegerField(default=0)
 
     def __str__(self):
         return self.username
@@ -27,4 +28,14 @@ class Listing(models.Model):
 
     def __str__(self):
         return f"{self.title} (${self.price})"
+    
+class Message(models.Model):
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages')
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"From {self.sender.username} to {self.receiver.username}"
+
     

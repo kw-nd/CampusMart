@@ -1,18 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="{% static 'market/styles.css' %}">
 </head>
 <body>
-    <h2>Login</h2>
-    {% if form.errors %}
-        <p style="color:red;">The username/password combination does not match our records.</p>
-    {% endif %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Log In</button>
-    </form>
-    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+
+    <div class="form-container">
+        <h2>Login</h2>
+
+        {% if form.errors %}
+            <p class="error-message">The username/password combination does not match our records.</p>
+        {% endif %}
+
+        <form method="POST" class="buy-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-green">Log In</button>
+        </form>
+
+        <p>Don't have an account? <a href="{% url 'register' %}" class="link-small">Register</a></p>
+    </div>
+
 </body>
 </html>

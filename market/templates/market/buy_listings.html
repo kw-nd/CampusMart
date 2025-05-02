@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buy Extra Listings</title>
+    <link rel="stylesheet" href="{% static 'market/styles.css' %}">
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Buy Extra Listings with Krato$Coin</h2>
+
+        {% if message %}
+            <p class="success-message">{{ message }}</p>
+        {% endif %}
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" class="buy-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-green">Purchase</button>
+        </form>
+
+        <a href="/" class="btn-back">Back to Home</a>
+    </div>
+
+</body>
+</html>

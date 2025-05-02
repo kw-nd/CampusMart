@@ -1,18 +1,70 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>CampusMart Home</title>
+    <link rel="stylesheet" href="{% static 'market/styles.css' %}">
 </head>
 <body>
-    <h1>Welcome to CampusMart!</h1>
 
-    <p>
+    <div class="header">
+        <img src="{% static 'market/campusmart_logo.png' %}" alt="CampusMart Logo" class="logo">
+        <h1>CampusMart - Listings</h1>
+    </div>
+
+    <div class="search-bar">
+        <form method="get" action="{% url 'home' %}">
+            <input type="text" name="q" placeholder="Search for products..." value="{{ query|default_if_none:'' }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="navigation-buttons">
         <a href="{% url 'create_listing' %}">Post a new item for sale</a>
-    </p>
+        <a href="{% url 'inbox' %}">Go to Inbox</a>
+        <a href="{% url 'buy_listings' %}">Buy Extra Listings</a>
+    </div>
 
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
+    <div class="logout-button">
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <hr>
+
+    {% if page_obj.object_list %}
+        <div class="listings-grid">
+            {% for listing in page_obj.object_list %}
+                <div class="listing-card">
+                    <img src="{{ listing.photo.url }}" alt="Product Image" class="product-image">
+                    <h3>{{ listing.title }}</h3>
+                    <p>Price: ${{ listing.price }}</p>
+                    {% if listing.user == request.user %}
+                    <a href="{% url 'edit_listing' listing.id %}">Edit</a> |
+                    <a href="{% url 'delete_listing' listing.id %}">Delete</a>
+                    {% else %}
+                        <a href="{% url 'send_message' listing.user.id %}">Message Seller</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>No listings available.</p>
+    {% endif %}
+
 </body>
 </html>

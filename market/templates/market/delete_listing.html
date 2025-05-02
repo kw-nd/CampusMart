@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Listing</title>
+    <link rel="stylesheet" href="{% static 'market/styles.css' %}">
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Are you sure you want to delete "{{ listing.title }}"?</h2>
+
+        <form method="POST" class="buy-form">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">Yes, delete it</button>
+        </form>
+
+        <a href="/" class="btn-back">Cancel</a>
+    </div>
+
+</body>
+</html>
